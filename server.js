@@ -38,15 +38,26 @@ async function startServer() {
       }
     });
 
-    app.get("/articles/:id", async (req, res) => {
-      try {
-        const article = await articlesCollection.findOne({ _id: new ObjectId(req.params.id) });
-        if (article) res.status(200).json(article);
-        else res.status(404).json({ message: "Article not found" });
-      } catch (err) {
-        res.status(500).json({ message: "Failed to fetch article", error: err.message });
-      }
-    });
+app.get("/articles/:id", async (req, res) => {
+  try {
+    const articleId = req.params.id;
+
+    // Check if the ID is a valid ObjectId
+    if (!ObjectId.isValid(articleId)) {
+      return res.status(400).json({ message: "Invalid article ID" });
+    }
+
+    const article = await articlesCollection.findOne({ _id: new ObjectId(articleId) });
+
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+
+    res.status(200).json(article);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch article", error: err.message });
+  }
+});
 
     app.get("/projects", async (req, res) => {
       try {
