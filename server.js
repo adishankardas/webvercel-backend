@@ -7,7 +7,7 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
 const url = process.env.MONGODB_URI;
-const dbName = "my-website";
+const dbName = "sample_mflix";
 
 if (!url) {
   console.error("❌ MONGODB_URI is not defined. Check your environment variables.");
